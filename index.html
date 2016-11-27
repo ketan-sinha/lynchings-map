@@ -68,9 +68,11 @@
             '</div>'+
             '</div>'
           });
-          console.log(marker.year);
-          if(results.features[i].properties.Race === 'White'){
-            marker.setIcon('https://cdn.discordapp.com/attachments/142402123051696128/252557247320686592/emoji.png');
+          if(results.features[i].properties.Race.search("Black") !== -1){
+            marker.setIcon('img/yellow_button.png');
+          }
+          else if(results.features[i].properties.Race.search("White") !== -1){
+            marker.setIcon('img/red_button.png');
           }
           oms.addMarker(marker);
         }
