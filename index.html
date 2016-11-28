@@ -74,6 +74,24 @@
           else if(results.features[i].properties.Race.search("White") !== -1){
             marker.setIcon('img/red_button.png');
           }
+          else if(results.features[i].properties.Race.search("Japanese") !== -1){
+            marker.setIcon('img/blue_button.png');
+          }
+          else if(results.features[i].properties.Race.search("Chinese") !== -1){
+            marker.setIcon('img/brown_button.png');
+          }
+          else if(results.features[i].properties.Race.search("Hispanic") !== -1){
+            marker.setIcon('img/pink_button.png');
+          }
+          else if(results.features[i].properties.Race.search("Italian") !== -1){
+            marker.setIcon('img/purple_button.png');
+          }
+          else if(results.features[i].properties.Race.search("Native American") !== -1){
+            marker.setIcon('img/green_button.png');
+          }
+          else{
+            marker.setIcon('img/gray_button.png');
+          }
           oms.addMarker(marker);
         }
 
