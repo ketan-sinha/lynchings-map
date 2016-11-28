@@ -1,4 +1,4 @@
-eqfeed_callback({
+lynchdb_callback({
    "type": "FeatureCollection",
    "features": [
   {

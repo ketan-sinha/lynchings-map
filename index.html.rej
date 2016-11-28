@@ -1,0 +1,23 @@
+diff a/index.html b/index.html	(rejected hunks)
+@@ -38,13 +38,19 @@
+         styles: [{"featureType":"all","elementType":"labels.text.fill","stylers":[{"saturation":36},{"color":"#000000"},{"lightness":40}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"visibility":"on"},{"color":"#000000"},{"lightness":16}]},{"featureType":"all","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"administrative","elementType":"geometry.fill","stylers":[{"color":"#000000"},{"lightness":20}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#000000"},{"lightness":17},{"weight":1.2}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":20}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":21}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#000000"},{"lightness":17}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#000000"},{"lightness":29},{"weight":0.2}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":18}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":16}]},{"featureType":"transit","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":19}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":17}]}]
+       });
+ 
++      //initialize heatmap layer
++      heatmap = new google.maps.visualization.HeatmapLayer({
++        data: getMarkers(),
++        map: map
++      });
++
+       var script = document.createElement('script');
+-      // TUses JSON db of lynchings
++      //loads local db of lynchings
+       script.src = 'lynchings.js';
+       document.getElementsByTagName('head')[0].appendChild(script);
+ 
+       var iw = new google.maps.InfoWindow();
+-      var oms = new OverlappingMarkerSpiderfier(map, {keepSpiderfied: true, nearbyDistance: 100});
++      var oms = new OverlappingMarkerSpiderfier(map, {keepSpiderfied: true, nearbyDistance: 20, legWeight: 3});
+ 
+       oms.addListener('click', function(marker){
+         iw.setContent(marker.desc);
