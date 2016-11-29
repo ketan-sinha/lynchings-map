@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #floating-panel{
+        position: absolute;;
+        top:10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id = "floating-panel">
+      <button onclick = "toggleHeatmap()">Heatmap</button>
+    </div>
+    <div id="map"></div>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCpQbnnUBIaxaB41kCOZWcCEeY6ghoivBA&libraries=visualization"></script>
+    <script src="bin/oms.min.js"></script>
+    <script src="bin/jquery-3.1.1.js"></script>
+    <script>
+      "use strict";
+      var map, heatmap;
+      var markers = new Array(); //markers array
+
+      //initialize map
+      map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 5,
+        center: new google.maps.LatLng(37.09024, -100.712891), //roughly the center of the United States
+        mapTypeId: 'roadmap',
+        styles: [{"featureType":"all","elementType":"labels.text.fill","stylers":[{"saturation":36},{"color":"#000000"},{"lightness":40}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"visibility":"on"},{"color":"#000000"},{"lightness":16}]},{"featureType":"all","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"administrative","elementType":"geometry.fill","stylers":[{"color":"#000000"},{"lightness":20}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#000000"},{"lightness":17},{"weight":1.2}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":20}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":21}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#000000"},{"lightness":17}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#000000"},{"lightness":29},{"weight":0.2}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":18}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":16}]},{"featureType":"transit","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":19}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#000000"},{"lightness":17}]}]
+      });
+
+      //initialize heatmap layer
+      //heatmap = new google.maps.visualization.HeatmapLayer({
+        //data: getMarkers(),
+      //  map: map
+    //  });
+
+      var script = document.createElement('script');
+      //loads local db of lynchings
+      script.src = 'lynchings.js';
+      document.getElementsByTagName('head')[0].appendChild(script);
+
+      var iw = new google.maps.InfoWindow();
+      var oms = new OverlappingMarkerSpiderfier(map, {keepSpiderfied: true, nearbyDistance: 20, legWeight: 3});
+
+      oms.addListener('click', function(marker){
+        iw.setContent(marker.desc);
+        iw.open(map, marker);
+      });
+      // Loop through the results array and place a marker for each
+      // set of coordinates.
+      window.eqfeed_callback = function(results) {
+        for (var i = 0; i < results.features.length; i++) {
+          var iconURL;
+          var coords = results.features[i].geometry.coordinates;
+          var latLng = new google.maps.LatLng(coords[1],coords[0]);
+          markers[i] = new google.maps.Marker({
+            icon: iconURL,
+            position: latLng,
+            map: map,
+            year: results.features[i].properties.Year,
+            desc: '<div id="content">'+
+            '<div id="siteNotice">'+
+            '</div>'+
+            '<h1 id="firstHeading" class="firstHeading">'+ results.features[i].properties.Name +'</h1>'+
+            '<div id="bodyContent">'+
+            '<p><i>'+ results.features[i].properties.Race + ' ' +
+                      results.features[i].properties.Gender + ' ' +
+                      results.features[i].properties.Age + '</i><p>' +
+            '<p><b>'+ results.features[i].properties.Year + '/' +
+                      results.features[i].properties.Month + '/' +
+                      results.features[i].properties.Day + '</b></p>' +
+            '<p><i>Accusation:</i> ' + results.features[i].properties.Accusation + '</p>' +
+            '<p><i>Death:</i> ' + results.features[i].properties["Method of Death"] + '</p>' +
+            '</div>'+
+            '</div>'
+          });
+          if(results.features[i].properties.Race.search("Black") !== -1){
+            markers[i].setIcon('img/yellow_button.png');
+          }
+          else if(results.features[i].properties.Race.search("White") !== -1){
+            markers[i].setIcon('img/red_button.png');
+          }
+          else if(results.features[i].properties.Race.search("Japanese") !== -1){
+            markers[i].setIcon('img/blue_button.png');
+          }
+          else if(results.features[i].properties.Race.search("Chinese") !== -1){
+            markers[i].setIcon('img/brown_button.png');
+          }
+          else if(results.features[i].properties.Race.search("Hispanic") !== -1){
+            markers[i].setIcon('img/pink_button.png');
+          }
+          else if(results.features[i].properties.Race.search("Italian") !== -1){
+            markers[i].setIcon('img/purple_button.png');
+          }
+          else if(results.features[i].properties.Race.search("Native American") !== -1){
+            markers[i].setIcon('img/green_button.png');
+          }
+          else{
+            markers[i].setIcon('img/gray_button.png');
+          }
+          oms.addMarker(markers[i]);
+        }
+
+      }
+
+      function toggleHeatmap(){
+        heatmap.setMap(heatmap.getMap() ? null : map);
+      }
+    </script>
+
+  </body>
+</html>
