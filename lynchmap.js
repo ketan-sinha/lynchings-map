@@ -1,5 +1,7 @@
 var mapMarkers = [];
+var heatmapMarkers = [];
 var iw = new google.maps.InfoWindow();
+
 var map = new google.maps.Map(document.getElementById('map'), {
 	zoom: 5,
 	center: new google.maps.LatLng(37.09024, -100.712891), //Roughly the center of United States
@@ -8,6 +10,12 @@ var map = new google.maps.Map(document.getElementById('map'), {
 	mapTypeControl: false,
 	streetViewControl: false,
 	scaleControl: true
+});
+
+var heatmap = new google.maps.visualization.HeatmapLayer({
+	data: heatmapMarkers,
+	dissipating: false,
+	map: map
 });
 
 var oms = new OverlappingMarkerSpiderfier(map, {
@@ -69,3 +77,22 @@ $(document).ready(function(){										//Initialize map with lynch markers
 		});
 	});
 });
+
+$(document).ready(function(){
+	$.getJSON('db/heatmapWeights.json', function(json){
+		console.log('Loaded heatmapWeights.json');
+		$.each(json.features, function(index, data){
+			var coords = data.geometry.coordinates;
+			var weightedLoc = {
+				location: new google.maps.LatLng(coords[1], coords[0]),
+				weight: data.properties.weight/100
+			};
+			console.log(weightedLoc.weight);
+			heatmapMarkers.push(weightedLoc);
+		});
+	});
+});
+
+function toggleHeatmap(){
+	heatmap.setMap(heatmap.getMap() ? null : map);
+}

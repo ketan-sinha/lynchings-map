@@ -7,7 +7,7 @@
       height: 100%;
       margin: 0;
       padding: 0;
-      font-family: impact, sans-serif;
+      font-family: helvetica, arial, sans-serif;
       background-color: black;
     }
     /* Actual sidebar panel */
@@ -23,16 +23,16 @@
       transition: 0.5s;
       padding-top: 60px;
       color: white;
-      margin-left: 10px;
+      margin: auto;
+      margin-left: 5px;
     }
     /* Sidebar menu text */
     .sidebar a{
-      padding: 8px 8px 8px 32px;
+      padding: 8px 8px 8px 0px;
       text-decoration: none;
       font-size: 25px;
       color: white;
       display: block;
-      font-family: impact;
       transition: 0.3s;
     }
     /* Mouse hover link color change */
@@ -68,13 +68,12 @@
     }
     </style>
   </head>
-
   <body>
-
-
     <div id = "sidemenu" class = "sidebar">
       <a href="javascript:void(0)" class = "closebtn" onclick = "closeNav()">&times;</a>
-      <p>Hello!</p>
+      <b><span style="font-size:30px;padding:0px 0px 15px 0px;font-variant: small-caps">Map of Lynchings Across the United States (1877-1950)</span></b>
+      <br><br><span style="font-size:13px">Ketan Sinha | Emerson Haynes</span><br>
+      <a href="javascript:toggleHeatmap()">Heatmap</a>
     </div>
 
     <div id="main">
@@ -83,7 +82,6 @@
 
     <div id = "map">
     </div>
-
 
     <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCpQbnnUBIaxaB41kCOZWcCEeY6ghoivBA&libraries=visualization"></script>
     <script src="bin/oms.min.js"></script>
