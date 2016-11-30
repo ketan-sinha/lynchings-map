@@ -29,7 +29,7 @@ oms.addListener('click', function(marker){				//Adds infobox popup on marker cli
 });
 
 $(document).ready(function(){										//Initialize map with lynch markers
-	$.getJSON('lynchings.json', function(json){
+	$.getJSON('db/lynchings.json', function(json){
 		console.log('Loaded lynchings.json');
 		$.each(json.features, function(index, data){	//Iterates through features[]
 			var coords = data.geometry.coordinates;
